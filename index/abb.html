@@ -1,0 +1,801 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Masuk ke SuperRTP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-dark: #061a35;
+      --bg-deep: #071b39;
+      --panel-soft: #f4f4f4;
+      --panel: #f3f3f3;
+      --input: #ececec;
+      --text: #111111;
+      --muted: #5d5d5d;
+      --soft: #d7dbe3;
+      --blue: #2b7ef2;
+      --blue-2: #4fb6ff;
+      --green: #2bc86d;
+      --green-2: #1cbf77;
+      --success: #1ea85d;
+      --shadow: rgba(6, 18, 36, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      font-family: "Inter", sans-serif;
+      background: var(--bg-dark);
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .left-panel {
+      position: relative;
+      flex: 1 1 50%;
+      min-width: 320px;
+      background: linear-gradient(180deg, #071d3d 0%, #071933 100%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .left-panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(77, 160, 255, 0.14), rgba(255,255,255,0.01));
+      pointer-events: none;
+    }
+
+    .brand-large {
+      position: absolute;
+      left: 3%;
+      top: 28%;
+      z-index: 1;
+      font-size: clamp(4.5rem, 8vw, 11rem);
+      line-height: 0.8;
+      font-weight: 900;
+      letter-spacing: -0.08em;
+      transform: skewX(-11deg);
+      white-space: nowrap;
+      color: rgba(255,255,255,0.98);
+      text-shadow: 0 0 16px rgba(255,255,255,0.04);
+    }
+
+    .brand-large .super {
+      display: block;
+      color: #fff;
+    }
+
+    .brand-large .rtp {
+      display: block;
+      margin-top: -0.14em;
+      color: #fff;
+    }
+
+    .brand-large .rtp span {
+      color: #2f9ef7;
+    }
+
+    .brand-sub {
+      position: absolute;
+      left: 6%;
+      bottom: 15%;
+      z-index: 1;
+      font-size: 1.28rem;
+      font-weight: 700;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.76);
+    }
+
+    .brand-sub small {
+      display: block;
+      margin-top: 10px;
+      letter-spacing: 0.22em;
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .right-panel {
+      flex: 1 1 50%;
+      background: #efefef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .login-shell {
+      width: min(680px, 100%);
+      background: var(--panel);
+      border-radius: 20px;
+      padding: 30px 36px 20px;
+      box-shadow: 0 22px 56px rgba(12, 18, 31, 0.04);
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+      font-weight: 900;
+      letter-spacing: -0.08em;
+      text-transform: uppercase;
+      font-size: clamp(2.2rem, 3vw, 3.8rem);
+    }
+
+    .logo .green { color: #51d377; }
+    .logo .blue { color: #1c8ef3; }
+
+    .title {
+      margin: 0 0 8px;
+      text-align: center;
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      font-size: clamp(2.5rem, 3vw, 4rem);
+      color: #111111;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #4f4f4f;
+      font-size: 1.07rem;
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+
+    .form-wrap {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .label {
+      display: block;
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      color: #1a1a1a;
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      background: var(--input);
+      border: 1px solid transparent;
+      border-radius: 12px;
+      height: 62px;
+      padding: 0 16px;
+      transition: 0.2s ease;
+    }
+
+    .input-wrap:focus-within {
+      border-color: rgba(44, 124, 235, 0.5);
+      box-shadow: 0 0 0 3px rgba(44, 124, 235, 0.08);
+      background: #f5f5f5;
+    }
+
+    .icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      margin-right: 12px;
+      display: grid;
+      place-items: center;
+      color: #3a3a3a;
+      opacity: 0.9;
+    }
+
+    .icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 1.08rem;
+      color: #1a1a1a;
+      font-family: "Inter", sans-serif;
+    }
+
+    input::placeholder {
+      color: rgba(82, 82, 82, 0.8);
+    }
+
+    .password-btn {
+      border: none;
+      background: transparent;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      color: #4b4b4b;
+      margin-left: 10px;
+    }
+
+    .password-btn svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+    }
+
+    .status-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      background: #eafaf1;
+      border: 1px solid #d7f1e0;
+      border-radius: 12px;
+      margin: 10px 0 18px;
+      padding: 12px 18px;
+      min-height: 54px;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: 0.25s ease;
+      pointer-events: none;
+    }
+
+    .status-box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .status-box.error {
+      background: #fff1f0;
+      border-color: #ffd2cf;
+    }
+
+    .status-box.error .status-left,
+    .status-box.error .text {
+      color: #b42318;
+    }
+
+    .status-box.error .check {
+      background: #b42318;
+    }
+
+    .status-box.error .cloud-tag {
+      display: none;
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: #1d1d1d;
+    }
+
+    .check {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--success);
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 0.88rem;
+      font-weight: 900;
+    }
+
+    .cloud-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border-radius: 999px;
+      padding: 5px 8px;
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(0,0,0,0.05);
+      color: #555;
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .cloud-tag .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2ec873;
+      box-shadow: 0 0 0 3px rgba(46, 200, 115, 0.14);
+      display: inline-block;
+    }
+
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 8px 0 20px;
+      color: #333;
+    }
+
+    .switch-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 500;
+      color: #1a1a1a;
+    }
+
+    .checkmark {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      background: #0d82e9;
+      position: relative;
+      display: inline-block;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,0.7);
+    }
+
+    .checkmark::after {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 2px;
+      width: 5px;
+      height: 9px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .switch-right {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 58px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(180deg, #5eaef8 0%, #2d90f2 100%);
+      color: #fff;
+      font-family: "Inter", sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(41, 123, 235, 0.22);
+      transition: 0.2s ease;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .login-btn:active {
+      transform: translateY(0);
+    }
+
+    .helper {
+      margin-top: 18px;
+      text-align: center;
+      color: #3f3f3f;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 980px) {
+      body {
+        display: block;
+        overflow: auto;
+      }
+
+      .left-panel {
+        min-height: 260px;
+      }
+
+      .brand-large {
+        left: 7%;
+        top: 22%;
+      }
+
+      .brand-sub {
+        bottom: 12%;
+      }
+
+      .right-panel {
+        padding: 16px;
+      }
+
+      .login-shell {
+        width: min(640px, 100%);
+        padding: 24px 18px 18px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .title {
+        font-size: 2.2rem;
+      }
+      .subtitle {
+        font-size: 0.95rem;
+      }
+      .switch-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .status-box {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background: #fff;
+    }
+
+    .left-panel {
+      flex: 0 0 42%;
+      min-width: 0;
+      min-height: 100vh;
+    }
+
+    .brand-large {
+      left: 4%;
+      top: 45%;
+      display: flex;
+      align-items: baseline;
+      gap: 0.07em;
+      font-size: clamp(2.1rem, 8.5vw, 6rem);
+      line-height: 1;
+      transform: skewX(-11deg);
+    }
+
+    .brand-large .super,
+    .brand-large .rtp {
+      display: inline;
+      margin: 0;
+    }
+
+    .brand-sub {
+      left: 5%;
+      top: calc(45% + clamp(2.1rem, 8.5vw, 6rem) + 0.5rem);
+      bottom: auto;
+      font-size: clamp(0.68rem, 1.8vw, 1rem);
+      letter-spacing: 0.34em;
+      white-space: nowrap;
+    }
+
+    .right-panel {
+      flex: 1 1 58%;
+      min-width: 0;
+      min-height: 100vh;
+      align-items: flex-start;
+      padding: clamp(150px, 25vh, 230px) clamp(24px, 3.5vw, 56px) 28px;
+      background: #fff;
+    }
+
+    .login-shell {
+      width: min(560px, 100%);
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .logo {
+      justify-content: flex-start;
+      margin-bottom: 0;
+      font-size: clamp(1.55rem, 2.2vw, 2rem);
+    }
+
+    .logo .blue {
+      color: #a6a9ad;
+    }
+
+    .logo-tagline {
+      margin: -2px 0 26px;
+      color: #a6a9ad;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.015em;
+    }
+
+    .title {
+      margin: 0 0 8px;
+      text-align: left;
+      font-size: clamp(1.8rem, 2.6vw, 2.35rem);
+    }
+
+    .subtitle {
+      margin-bottom: 36px;
+      text-align: left;
+      font-size: 0.82rem;
+    }
+
+    .form-wrap {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+    }
+
+    .field {
+      margin-bottom: 12px;
+    }
+
+    .label {
+      margin-bottom: 6px;
+      font-size: 0.82rem;
+    }
+
+    .input-wrap {
+      height: 49px;
+      padding: 0 12px;
+      border-radius: 9px;
+      background: #e8efff;
+    }
+
+    .input-wrap:focus-within {
+      background: #f8faff;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      font-size: 0.88rem;
+    }
+
+    .status-box {
+      min-height: 52px;
+      margin: 12px 0 55px;
+      padding: 9px 10px;
+      border: 1px solid #dedede;
+      border-radius: 0;
+      background: #f8f8f8;
+    }
+
+    .status-left {
+      gap: 7px;
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+
+    .check {
+      width: 23px;
+      height: 23px;
+    }
+
+    .cloud-tag {
+      padding: 4px 6px;
+      border-radius: 0;
+    }
+
+    .switch-row {
+      gap: 10px;
+      margin: 8px 0 16px;
+      font-size: 0.76rem;
+    }
+
+    .switch-right {
+      font-size: 0.75rem;
+      text-align: right;
+    }
+
+    .login-btn {
+      height: 46px;
+      border-radius: 9px;
+      background: linear-gradient(100deg, #69b6f7 0%, #6079f4 100%);
+      font-size: 0.9rem;
+      box-shadow: 0 8px 18px rgba(41, 123, 235, 0.16);
+    }
+
+    .helper {
+      margin-top: 14px;
+      text-align: left;
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        display: block;
+        overflow-y: auto;
+      }
+
+      .left-panel {
+        min-height: 180px;
+      }
+
+      .brand-large {
+        left: 5%;
+        top: 22%;
+        font-size: clamp(3.2rem, 16vw, 5rem);
+      }
+
+      .brand-sub {
+        left: 6%;
+        top: calc(22% + clamp(3.2rem, 16vw, 5rem) + 0.4rem);
+        bottom: auto;
+        font-size: 0.8rem;
+        letter-spacing: 0.26em;
+      }
+
+      .right-panel {
+        min-height: calc(100vh - 180px);
+        align-items: center;
+        padding: 30px 22px;
+      }
+
+      .login-shell {
+        width: min(460px, 100%);
+      }
+    }
+
+    @media (max-width: 540px) {
+      .title {
+        font-size: 1.9rem;
+      }
+
+      .subtitle {
+        margin-bottom: 28px;
+        font-size: 0.8rem;
+      }
+
+      .switch-row {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="left-panel">
+    <div class="brand-large">
+      <span class="super">Super</span>
+      <span class="rtp"><span>R</span>TP</span>
+    </div>
+    <div class="brand-sub">
+      Pusat Kontrol
+      <small>ADMIN TAMPIL</small>
+    </div>
+  </aside>
+
+  <main class="right-panel">
+    <div class="login-shell">
+      <div class="logo">
+        <span class="green">PANCAR</span><span class="blue">TOTO</span>
+      </div>
+      <div class="logo-tagline">TOGEL ONLINE TERPERCAYA</div>
+
+      <h1 class="title">Masuk ke SuperRTP</h1>
+      <div class="subtitle">Masukkan email dan kata sandi admin yang sudah terdaftar.</div>
+
+      <form class="form-wrap" id="loginForm" action="#" method="post">
+        <div class="field">
+          <label class="label" for="email">Email Admin</label>
+          <div class="input-wrap">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 7.5C4 6.67 4.67 6 5.5 6h13c.83 0 1.5.67 1.5 1.5v9c0 .83-.67 1.5-1.5 1.5h-13C4.67 18 4 17.33 4 16.5v-9Zm1.5 0 6.5 5.1 6.5-5.1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <input id="email" name="email" type="email" placeholder="example@gmail.com" value="pancartotoadmin123@gmail.com" autocomplete="username" required />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="password">Kata Sandi</label>
+          <div class="input-wrap">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 10V8.7A5 5 0 0 1 12 4a5 5 0 0 1 5 4.7V10M6.5 10h11a1.5 1.5 0 0 1 1.5 1.5v7A1.5 1.5 0 0 1 17.5 20h-11A1.5 1.5 0 0 1 5 18.5v-7A1.5 1.5 0 0 1 6.5 10Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+            <input id="password" name="password" type="password" placeholder="Masukkan kata sandi" value="123123dunia" autocomplete="current-password" required />
+            <button type="button" class="password-btn" id="togglePassword" aria-label="Tampilkan kata sandi">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="status-box show" id="loginStatus" role="status" aria-live="polite">
+          <div class="status-left">
+            <span class="check">✓</span>
+            <span class="text" id="loginStatusText">Success!</span>
+          </div>
+          <div class="cloud-tag"><span class="dot"></span>Cloudflare</div>
+        </div>
+
+        <div class="switch-row">
+          <div class="switch-left">
+            <span class="checkmark" aria-hidden="true"></span>
+            <span>Sesi tersimpan otomatis</span>
+          </div>
+          <div class="switch-right">Tetap masuk di perangkat ini</div>
+        </div>
+
+        <button class="login-btn" type="submit">Masuk</button>
+
+        <div class="helper">Silakan masuk untuk membuka menu admin.</div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.querySelector('.login-btn');
+    const loginStatus = document.getElementById('loginStatus');
+    const loginStatusText = document.getElementById('loginStatusText');
+    const adminEmail = 'pancartotoadmin123@gmail.com';
+    const adminPassword = '123123dunia';
+
+    togglePassword.addEventListener('click', () => {
+      const isHidden = passwordInput.type === 'password';
+      passwordInput.type = isHidden ? 'text' : 'password';
+      togglePassword.setAttribute('aria-label', isHidden ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi');
+    });
+
+    loginForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      loginStatus.classList.remove('show', 'error');
+
+      if (document.getElementById('email').value.trim().toLowerCase() !== adminEmail ||
+          passwordInput.value !== adminPassword) {
+        loginStatusText.textContent = 'Email atau kata sandi salah.';
+        loginStatus.classList.add('error', 'show');
+        passwordInput.focus();
+        return;
+      }
+
+      try {
+        sessionStorage.setItem('superRtpAdminAuthenticated', '1');
+      } catch (error) {
+        console.error('Sesi admin tidak dapat disimpan di browser.', error);
+        loginStatusText.textContent = 'Sesi tidak dapat disimpan. Periksa pengaturan browser, lalu coba lagi.';
+        loginStatus.classList.add('error', 'show');
+        return;
+      }
+
+      loginStatusText.textContent = 'Berhasil masuk. Membuka dashboard...';
+      loginStatus.classList.add('show');
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Berhasil Masuk';
+      window.setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 500);
+    });
+  </script>
+</body>
+</html>
